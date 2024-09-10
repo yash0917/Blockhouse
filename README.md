@@ -59,29 +59,32 @@ The Django API will be running at http://localhost:8000.
 Libraries and Tools Used:
 
 Frontend:
-	•	Next.js: React-based framework for building server-rendered and static web applications.
-	•	Chart.js: Flexible JavaScript charting library.
-	•	react-chartjs-2: React wrapper for Chart.js.
-	•	Axios: Promise-based HTTP client for making API requests.
+	• Next.js: React-based framework for building server-rendered and static web applications.
+	• Chart.js: Flexible JavaScript charting library.
+	• react-chartjs-2: React wrapper for Chart.js.
+	• Axios: Promise-based HTTP client for making API requests.
 
 Backend:
-	•	Django: Python-based web framework for building robust APIs.
-	•	Django REST Framework: Toolkit for building Web APIs in Django.
-	•	CORS Headers: Middleware to handle CORS (Cross-Origin Resource Sharing) in Django.
+	• Django: Python-based web framework for building robust APIs.
+	• Django REST Framework: Toolkit for building Web APIs in Django.
+	• CORS Headers: Middleware to handle CORS (Cross-Origin Resource Sharing) in Django.
 
 
 Approach and Thought Process
-	1.	Frontend:
-	•	Used Next.js for fast server-side rendering and easy routing.
-	•	Implemented a dashboard page that contains multiple charts.
-	•	Fetched chart data from the Django API using Axios and dynamically populated it in charts using react-chartjs-2.
-	•	The charts are rendered using Chart.js, which supports a variety of chart types including Candlestick, Line, Bar, and Pie charts.
-	2.	Backend:
-	•	Set up a simple Django backend with APIs to provide hardcoded data for each chart.
-	•	Django REST Framework was used to build and manage the API endpoints.
-	•	A dedicated /charts/ app was created to serve different types of chart data (Candlestick, Line, Bar, Pie).
-	3.	Challenges:
-	•	Managed the compatibility between different versions of Chart.js and the chartjs-chart-financial plugin.
+
+	1. Frontend:
+	• Used Next.js for fast server-side rendering and easy routing.
+	• Implemented a dashboard page that contains multiple charts.
+	• Fetched chart data from the Django API using Axios and dynamically populated it in charts using react-chartjs-2.
+	• The charts are rendered using Chart.js, which supports a variety of chart types including Candlestick, Line, Bar, and Pie charts.
+ 
+	2. Backend:
+	• Set up a simple Django backend with APIs to provide hardcoded data for each chart.
+	• Django REST Framework was used to build and manage the API endpoints.
+	• A dedicated /charts/ app was created to serve different types of chart data (Candlestick, Line, Bar, Pie).
+ 
+	3. Challenges:
+	• Managed the compatibility between different versions of Chart.js and the chartjs-chart-financial plugin (Still figuring this out).
 
 
   
