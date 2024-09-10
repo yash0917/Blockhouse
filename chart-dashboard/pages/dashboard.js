@@ -1,5 +1,5 @@
 import React from 'react';
-import CandlestickChart from '../components/CandlestickChart';
+import CandlestickChart from '../app/components/CandlestickChart';
 // Add imports for other charts like LineChart, BarChart, PieChart
 
 const Dashboard = () => {

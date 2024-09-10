@@ -1,38 +1,57 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
+import { Chart, registerables } from 'chart.js';
+import { CandlestickController, CandlestickElement, OhlcController, OhlcElement } from 'chartjs-chart-financial';
+import 'chartjs-adapter-date-fns';
 import axios from 'axios';
-import { Chart as ChartJS, CategoryScale, LinearScale, CandlestickController, BarElement, Tooltip, Title } from 'chart.js';
-import { Chart } from 'react-chartjs-2';
 
-ChartJS.register(CategoryScale, LinearScale, CandlestickController, BarElement, Tooltip, Title);
+// Register all chart components
+Chart.register(...registerables, CandlestickController, CandlestickElement, OhlcController, OhlcElement);
 
 const CandlestickChart = () => {
-    const [chartData, setChartData] = useState(null);
+    const chartRef = useRef(null);
+    const chartInstance = useRef(null);
 
-    // Fetch data from Django API
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const response = await axios.get('http://localhost:8000/api/candlestick-data/');
                 const data = response.data.data;
 
-                const labels = data.map(item => item.x); // Dates
                 const dataset = data.map(item => ({
-                    open: item.open,
-                    high: item.high,
-                    low: item.low,
-                    close: item.close
+                    x: new Date(item.x).getTime(),
+                    o: item.open,
+                    h: item.high,
+                    l: item.low,
+                    c: item.close,
                 }));
 
-                setChartData({
-                    labels: labels,
-                    datasets: [
-                        {
+                if (chartInstance.current) {
+                    chartInstance.current.destroy();
+                }
+
+                const ctx = chartRef.current.getContext('2d');
+                chartInstance.current = new Chart(ctx, {
+                    type: 'candlestick',
+                    data: {
+                        datasets: [{
                             label: 'Candlestick Data',
-                            data: dataset,
-                            borderColor: 'rgba(0, 0, 0, 1)',
-                            backgroundColor: 'rgba(0, 0, 0, 0.1)',
-                        },
-                    ],
+                            data: dataset
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            x: {
+                                type: 'time',
+                                time: {
+                                    unit: 'day'
+                                }
+                            },
+                            y: {
+                                beginAtZero: false
+                            }
+                        }
+                    }
                 });
             } catch (error) {
                 console.error('Error fetching the candlestick data:', error);
@@ -40,18 +59,18 @@ const CandlestickChart = () => {
         };
 
         fetchData();
-    }, []);
 
-    // Render chart
-    if (!chartData) return <div>Loading...</div>;
+        return () => {
+            if (chartInstance.current) {
+                chartInstance.current.destroy();
+            }
+        };
+    }, []);
 
     return (
         <div>
             <h2>Candlestick Chart</h2>
-            <Chart
-                type="candlestick"
-                data={chartData}
-            />
+            <canvas ref={chartRef}></canvas>
         </div>
     );
 };
